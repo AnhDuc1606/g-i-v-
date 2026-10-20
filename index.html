@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Thư viện Icon FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #d81b60;
+        }
+
+        .music-btn {
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px;
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%;
+            background: var(--primary-color); 
+            color: white; 
+            border: none;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(216, 104, 122, 0.5); 
+            transition: transform 0.3s;
+        }
+        .music-btn:hover { transform: scale(1.1); }
+        
+        .music-waves {
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%;
+            border: 2px solid var(--primary-color); 
+            z-index: -1; 
+            animation: ripple 2s infinite; 
+            display: none;
+        }
+        .music-btn.playing .music-waves { display: block; }
+        
+        @keyframes ripple { 
+            0% { transform: scale(1); opacity: 1; } 
+            100% { transform: scale(1.8); opacity: 0; } 
+        }
+    </style>
+
+    <!-- CSS chính -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Nút Trình Phát Nhạc -->
+    <button id="musicBtn" class="music-btn" onclick="toggleMusic()" aria-label="Bật/Tắt nhạc">
+        <i id="musicIcon" class="fa-solid fa-play"></i>
+        <div class="music-waves"></div>
+    </button>
+
+    <!-- Container chứa hiệu ứng cánh hoa rơi nền -->
+    <div id="petals-container"></div>
+
+    <main class="main-container">
+        <div class="header-text" id="headerText">
+            <span class="badge-date">✨ Happy Vietnamese Women's Day 20/10 ✨</span>
+            <h1 id="envelopeGreeting">Gửi bạn một món quà nhỏ...</h1>
+        </div>
+
+        <!-- Khu vực Phong thư -->
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="letter-preview">
+                    <p class="preview-title">Happy 20/10 🌸</p>
+                </div>
+                <div class="heart-seal" id="heartSeal">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="click-hint" id="clickHint">👆 Chạm vào phong thư để mở nhé!</p>
+        </div>
+    </main>
+
+    <!-- Modal hiển thị toàn bộ bức thư sau khi mở -->
+    <div class="letter-modal-overlay" id="letterModal">
+        <div class="letter-card">
+            <div class="letter-decor-top">🌸 🌷 🌸</div>
+            <h2 class="letter-recipient" id="letterRecipient">Gửi bạn,</h2>
+            <div class="letter-body" id="letterBody"></div>
+            <div class="letter-footer">
+                <p class="letter-signature" id="letterSignature">Thân mến!</p>
+            </div>
+            <button class="btn-replay" id="btnCloseLetter">Đóng thư lại 💌</button>
+        </div>
+    </div>
+
+    <!-- Thư viện pháo hoa giấy -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Code điều khiển nhạc tự động phát thông minh -->
+    <script>
+        const musicBtn = document.getElementById('musicBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        
+        const audio = new Audio('nhac.mp3'); 
+        audio.loop = true;
+
+        let isPlaying = false;
+
+        function playMusic() {
+            audio.play().then(() => {
+                musicIcon.classList.replace('fa-play', 'fa-pause');
+                musicBtn.classList.add('playing');
+                isPlaying = true;
+            }).catch(error => {
+                console.log("Trình duyệt chặn tự phát, chờ người dùng tương tác...");
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.classList.replace('fa-pause', 'fa-play');
+                musicBtn.classList.remove('playing');
+                isPlaying = false;
+            } else {
+                playMusic();
+            }
+        }
+
+        // Tự động phát ngay khi tải trang
+        window.addEventListener('DOMContentLoaded', () => {
+            playMusic();
+        });
+
+        // Tự động phát ngay khi người dùng chạm/click lần đầu tiên vào màn hình
+        const unlockAudio = () => {
+            if (!isPlaying) {
+                playMusic();
+            }
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
+            window.removeEventListener('keydown', unlockAudio);
+        };
+
+        window.addEventListener('click', unlockAudio);
+        window.addEventListener('touchstart', unlockAudio);
+        window.addEventListener('keydown', unlockAudio);
+
+        // Kích hoạt nhạc ngay khi bấm mở phong thư
+        document.getElementById('envelopeWrapper').addEventListener('click', () => {
+            if (!isPlaying) {
+                playMusic();
+            }
+        });
+    </script>
+
+    <!-- File logic JavaScript chính -->
+    <script src="script.js"></script>
+</body>
+</html>

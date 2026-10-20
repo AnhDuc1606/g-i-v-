@@ -1,0 +1,419 @@
+/* ================= RESET & BIẾN MÀU SẮC ================= */
+:root {
+    --bg-gradient-1: #fff0f5;
+    --bg-gradient-2: #ffc2d4;
+    --env-back: #f48fb1;
+    --env-pocket: #f8bbd0;
+    --env-pocket-side: #f48fb1;
+    --env-flap: #ec407a;
+    --heart-color: #d81b60;
+    --text-primary: #5c2c38;
+    --text-accent: #c2185b;
+    --paper-bg: #fffdf9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    color: var(--text-primary);
+}
+
+/* ================= NÚT NHẠC & TRÌNH PHÁT YOUTUBE CHUẨN 200x200 ================= */
+.music-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #f48fb1;
+    font-size: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 4px 12px rgba(216, 27, 96, 0.2);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.music-btn.playing {
+    animation: spinMusic 4s linear infinite;
+    background: #fff0f5;
+}
+
+@keyframes spinMusic {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.music-status {
+    position: fixed;
+    top: 25px;
+    right: 74px;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--text-accent);
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(194, 24, 91, 0.15);
+    z-index: 200;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.music-status.hidden {
+    opacity: 0;
+}
+
+/* Khung YouTube giữ kích thước thật 200x200px trong màn hình để không bị Chrome khóa */
+.yt-wrapper {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 200px;
+    height: 200px;
+    opacity: 0.002; /* Gần như vô hình nhưng Chrome vẫn tính là đang hiển thị */
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* ================= HIỆU ỨNG CÁNH HOA RƠI ================= */
+#petals-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    top: -10%;
+    background: linear-gradient(135deg, #ff9ebb, #ff6b95);
+    border-radius: 150% 0 150% 0;
+    opacity: 0.75;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0vh) rotate(0deg) translateX(0px);
+        opacity: 0.85;
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) translateX(25px);
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg) translateX(-25px);
+        opacity: 0.2;
+    }
+}
+
+/* ================= BỐ CỤC CHÍNH ================= */
+.main-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.header-text {
+    margin-bottom: 45px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.badge-date {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(4px);
+    color: var(--text-accent);
+    padding: 6px 16px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(216, 27, 96, 0.12);
+    margin-bottom: 12px;
+}
+
+.header-text h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.3rem;
+    color: var(--text-accent);
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* ================= PHONG THƯ 3D ================= */
+.envelope-wrapper {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatEnvelope 3s ease-in-out infinite;
+}
+
+@keyframes floatEnvelope {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: var(--env-back);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 18px 35px rgba(194, 24, 91, 0.25);
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 115px solid var(--env-flap);
+    transform-origin: top;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s;
+    z-index: 5;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+}
+
+.pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid var(--env-pocket-side);
+    border-right: 150px solid var(--env-pocket-side);
+    border-bottom: 110px solid var(--env-pocket);
+    border-top: 90px solid transparent;
+    border-radius: 0 0 12px 12px;
+    z-index: 4;
+}
+
+.letter-preview {
+    position: absolute;
+    bottom: 10px;
+    left: 18px;
+    width: 264px;
+    height: 170px;
+    background: var(--paper-bg);
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+}
+
+.preview-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    color: var(--text-accent);
+}
+
+.heart-seal {
+    position: absolute;
+    top: 92px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 46px;
+    height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--heart-color);
+    z-index: 6;
+    box-shadow: 0 4px 12px rgba(216, 27, 96, 0.3);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    animation: pulseHeart 1.5s infinite;
+}
+
+.heart-seal svg {
+    width: 26px;
+    height: 26px;
+}
+
+@keyframes pulseHeart {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.12); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope.open .heart-seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    pointer-events: none;
+}
+
+.envelope.open .letter-preview {
+    transform: translateY(-85px);
+}
+
+.click-hint {
+    margin-top: 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-accent);
+    opacity: 0.85;
+    animation: fadeBlink 2s infinite;
+}
+
+@keyframes fadeBlink {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ================= MODAL BỨC THƯ CHI TIẾT ================= */
+.letter-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(92, 44, 56, 0.45);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.letter-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.letter-card {
+    background: var(--paper-bg);
+    background-image: radial-gradient(#ffdde6 1px, transparent 1px);
+    background-size: 20px 20px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 20px 50px rgba(194, 24, 91, 0.3);
+    border: 2px solid #ffc1d3;
+    transform: translateY(40px) scale(0.9);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: left;
+    position: relative;
+}
+
+.letter-modal-overlay.active .letter-card {
+    transform: translateY(0) scale(1);
+}
+
+.letter-decor-top {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    letter-spacing: 6px;
+}
+
+.letter-recipient {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: var(--text-accent);
+    margin-bottom: 14px;
+    border-bottom: 1px dashed #f48fb1;
+    padding-bottom: 8px;
+}
+
+.letter-body {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--text-primary);
+    font-weight: 500;
+    white-space: pre-line;
+}
+
+.letter-footer {
+    margin-top: 22px;
+    text-align: right;
+}
+
+.letter-signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    color: var(--text-accent);
+}
+
+.btn-replay {
+    margin-top: 22px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ec407a, #d81b60);
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(216, 27, 96, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-replay:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 360px) {
+    .envelope {
+        transform: scale(0.88);
+    }
+    .header-text h1 {
+        font-size: 1.9rem;
+    }
+    .letter-card {
+        padding: 22px 18px;
+    }
+    .letter-recipient {
+        font-size: 1.75rem;
+    }
+    .letter-body {
+        font-size: 0.95rem;
+    }
+}
